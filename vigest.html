@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VIGEST | Red de Transporte en Cuba</title>
+  <meta name="description" content="VIGEST - Servicio, movilidad y confianza. Gestión de transporte verificado en Cuba: cargas, pasajeros, mudanzas, delivery, combustible, talleres y empleos.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+  <style>
+    :root {
+      --naranja: #FF6B00;
+      --gris: #4A4A4A;
+      --azul: #002B5B;
+      --blanco: #F5F5F5;
+      --negro: #0A0A0A;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--blanco);
+      color: var(--gris);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3 {
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.05em;
+      color: var(--azul);
+    }
+
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+
+    /* ===== LOGO IMAGEN ===== */
+    .logo-img {
+      display: block;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .logo-header .logo-img { height: 70px; }
+    .hero .logo-img { height: clamp(160px, 30vw, 360px); margin: 0 auto 2rem; }
+    .logo-footer .logo-img { height: 110px; margin: 0 auto; }
+
+    /* ===== HEADER ===== */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: rgba(0, 43, 91, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      padding: 0.4rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+    }
+
+    .logo-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    nav ul {
+      display: flex;
+      list-style: none;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    nav a {
+      color: var(--blanco);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      transition: color 0.3s;
+    }
+
+    nav a:hover { color: var(--naranja); }
+
+    .btn-whatsapp-header {
+      background: var(--naranja);
+      color: white !important;
+      padding: 0.5rem 1.2rem;
+      border-radius: 50px;
+      font-weight: 600 !important;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .btn-whatsapp-header:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 107, 0, 0.4);
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: radial-gradient(circle at bottom right, #001f3f 0%, #000a18 70%);
+      position: relative;
+      overflow: hidden;
+      padding: 8rem 2rem 4rem;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      bottom: -300px;
+      right: -300px;
+      width: 900px;
+      height: 900px;
+      background: radial-gradient(circle, rgba(0, 120, 255, 0.45) 0%, rgba(0, 60, 150, 0.2) 40%, transparent 70%);
+      animation: pulse 6s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.7; }
+      50% { transform: scale(1.15); opacity: 1; }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 900px;
+    }
+
+    .hero .logo-img {
+      filter: drop-shadow(0 0 50px rgba(0, 140, 255, 0.7))
+              drop-shadow(0 0 20px rgba(0, 100, 200, 0.5));
+    }
+
+    .hero .tagline {
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      color: var(--naranja);
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero p.descripcion {
+      color: rgba(245,245,245,0.85);
+      font-size: 1.1rem;
+      max-width: 700px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .btn-principal {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: var(--naranja);
+      color: white;
+      padding: 1rem 2.5rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      transition: all 0.3s;
+      box-shadow: 0 10px 30px rgba(255, 107, 0, 0.3);
+    }
+
+    .btn-principal:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(255, 107, 0, 0.5);
+    }
+
+    /* ===== SECCIONES ===== */
+    section { padding: 6rem 2rem; }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      margin-bottom: 1rem;
+      color: var(--azul);
+    }
+
+    .section-subtitle {
+      text-align: center;
+      color: var(--gris);
+      max-width: 700px;
+      margin: 0 auto 4rem;
+      font-size: 1.05rem;
+    }
+
+    .divider {
+      width: 80px;
+      height: 4px;
+      background: var(--naranja);
+      margin: 0 auto 1.5rem;
+      border-radius: 2px;
+    }
+
+    /* ===== SOBRE NOSOTROS ===== */
+    .sobre { background: white; }
+
+    .sobre-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2.5rem;
+      align-items: center;
+    }
+
+    .sobre-texto h3 {
+      font-size: 1.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .sobre-texto p {
+      font-size: 1.05rem;
+      margin-bottom: 1rem;
+      color: var(--gris);
+    }
+
+    .sobre-imagen {
+      background: linear-gradient(135deg, var(--azul), var(--gris));
+      border-radius: 20px;
+      padding: 3rem;
+      text-align: center;
+      color: white;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+
+    .sobre-imagen .stat {
+      font-family: 'Cinzel', serif;
+      font-size: 2.5rem;
+      color: var(--naranja);
+      font-weight: 700;
+    }
+
+    .sobre-imagen .stat-label {
+      font-size: 0.9rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.9;
+      margin-top: 0.5rem;
+    }
+
+    /* ===== MISIÓN VISIÓN VALORES ===== */
+    .mvv { background: var(--blanco); }
+
+    .mvv-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .mvv-card {
+      background: white;
+      padding: 2.5rem 2rem;
+      border-radius: 16px;
+      border-top: 5px solid var(--naranja);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .mvv-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+    }
+
+    .mvv-icon {
+      width: 70px;
+      height: 70px;
+      background: var(--azul);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      color: var(--naranja);
+    }
+
+    .mvv-icon .material-symbols-outlined {
+      font-size: 2.2rem;
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 40;
+    }
+
+    .mvv-card h3 {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .mvv-card p {
+      color: var(--gris);
+      font-size: 0.95rem;
+      text-align: justify;
+      text-justify: inter-word;
+      width: 100%;
+    }
+
+    .valores-lista {
+      list-style: none;
+      margin-top: 1rem;
+      text-align: justify;
+      text-justify: inter-word;
+      width: 100%;
+    }
+
+    .valores-lista li {
+      padding: 0.4rem 0;
+      color: var(--gris);
+      font-size: 0.95rem;
+      text-align: justify;
+    }
+
+    .valores-lista li strong { color: var(--azul); }
+
+    /* ===== SERVICIOS ===== */
+    .servicios { background: var(--azul); }
+    .servicios .section-title { color: var(--blanco); }
+    .servicios .section-subtitle { color: rgba(245,245,245,0.8); }
+
+    .servicios-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .servicio-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 2.5rem 1.5rem;
+      transition: all 0.3s;
+      backdrop-filter: blur(10px);
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .servicio-card:hover {
+      background: rgba(255,107,0,0.1);
+      border-color: var(--naranja);
+      transform: translateY(-5px);
+    }
+
+    .servicio-card .icono {
+      width: 70px;
+      height: 70px;
+      background: rgba(255,107,0,0.15);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      color: var(--naranja);
+    }
+
+    .servicio-card .icono .material-symbols-outlined {
+      font-size: 2.2rem;
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 40;
+    }
+
+    .servicio-card h3 {
+      color: var(--blanco);
+      font-size: 1.2rem;
+      margin-bottom: 0.8rem;
+      text-align: center;
+    }
+
+    .servicio-card p {
+      color: rgba(245,245,245,0.75);
+      font-size: 0.92rem;
+      text-align: center;
+    }
+
+    /* ===== CÓMO FUNCIONA ===== */
+    .como-funciona { background: white; }
+
+    .pasos-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .paso {
+      text-align: center;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .paso-numero {
+      width: 70px;
+      height: 70px;
+      background: var(--naranja);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cinzel', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin: 0 auto 1.2rem;
+      box-shadow: 0 10px 25px rgba(255, 107, 0, 0.3);
+    }
+
+    .paso h4 {
+      color: var(--azul);
+      font-size: 1.1rem;
+      margin-bottom: 0.6rem;
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .paso p {
+      color: var(--gris);
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    /* ===== CONTACTO ===== */
+    .contacto {
+      background: radial-gradient(circle at center, #0a1a30 0%, #001a3a 70%);
+      text-align: center;
+    }
+
+    .contacto .section-title { color: var(--blanco); }
+    .contacto .section-subtitle { color: rgba(245,245,245,0.8); }
+
+    .contacto-botones {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+
+    .btn-contacto {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: all 0.3s;
+    }
+
+    .btn-contacto.whatsapp {
+      background: var(--naranja);
+      color: white;
+      box-shadow: 0 10px 30px rgba(255, 107, 0, 0.3);
+    }
+
+    .btn-contacto.whatsapp:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(255, 107, 0, 0.5);
+    }
+
+    .btn-contacto.correo {
+      background: transparent;
+      color: var(--blanco);
+      border: 2px solid var(--blanco);
+    }
+
+    .btn-contacto.correo:hover {
+      background: var(--blanco);
+      color: var(--azul);
+    }
+
+    .btn-contacto.facebook {
+      background: #1877F2;
+      color: white;
+      box-shadow: 0 10px 30px rgba(24, 119, 242, 0.3);
+    }
+
+    .btn-contacto.facebook:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(24, 119, 242, 0.5);
+    }
+
+    .btn-contacto .material-symbols-outlined {
+      font-size: 1.3rem;
+    }
+
+    .contacto-facebook-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+      width: 100%;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--negro);
+      color: rgba(245,245,245,0.6);
+      text-align: center;
+      padding: 3rem 2rem 2rem;
+    }
+
+    footer .logo-footer {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    footer p {
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+
+    footer .hashtags {
+      color: var(--naranja);
+      font-size: 0.85rem;
+      margin-top: 1rem;
+    }
+
+    /* ===== WHATSAPP FLOTANTE ===== */
+    .whatsapp-flotante {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      width: 60px;
+      height: 60px;
+      background: #25D366;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 25px rgba(37, 211, 102, 0.5);
+      z-index: 999;
+      transition: transform 0.3s;
+      text-decoration: none;
+      color: white;
+    }
+
+    .whatsapp-flotante:hover { transform: scale(1.1); }
+
+    .whatsapp-flotante .material-symbols-outlined {
+      font-size: 1.8rem;
+      font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 40;
+    }
+
+    /* ===== LAYOUT ESPECIAL PARA SERVICIOS EN DESKTOP ===== */
+    @media (min-width: 1024px) {
+      .servicios-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .servicio-talleres {
+        grid-column: 2;
+        grid-row: 2;
+      }
+      .servicio-empleo {
+        grid-column: 3;
+        grid-row: 2;
+      }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      header { padding: 0.4rem 1rem; }
+      nav ul { display: none; }
+      .logo-header .logo-img { height: 55px; }
+      section { padding: 4rem 1.2rem; }
+      .hero { padding: 7rem 1.2rem 3rem; }
+      .sobre-imagen .stat { font-size: 2rem; }
+      .hero .logo-img { height: clamp(140px, 40vw, 240px); }
+      .logo-footer .logo-img { height: 90px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <div class="logo-header">
+      <img src="logo.png" alt="VIGEST" class="logo-img">
+    </div>
+    <nav>
+      <ul>
+        <li><a href="#sobre">Nosotros</a></li>
+        <li><a href="#mvv">Misión</a></li>
+        <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#contacto" class="btn-whatsapp-header">Contactar</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-content">
+      <img src="logo.png" alt="VIGEST" class="logo-img">
+      <div class="tagline">Servicio · Movilidad · Confianza</div>
+      <p class="descripcion">
+        Nace la red de gestión de transporte más confiable de Cuba en crecimiento. Conectamos clientes con transportistas verificados para cargas, pasajeros, mudanzas y delivery.
+      </p>
+      <a href="https://wa.me/5363990562?text=Hola%20VIGEST,%20necesito%20información" class="btn-principal" target="_blank">
+        <span class="material-symbols-outlined">chat</span>
+        Solicitar información
+      </a>
+    </div>
+  </section>
+
+  <!-- SOBRE NOSOTROS -->
+  <section class="sobre" id="sobre">
+    <div class="container">
+      <div class="divider"></div>
+      <h2 class="section-title">¿Quiénes somos?</h2>
+      <p class="section-subtitle">Una red nacida en Cuba, para resolver los problemas de movilidad del día a día con seriedad y confianza.</p>
+
+      <div class="sobre-grid">
+        <div class="sobre-texto">
+          <h3>Movilidad organizada, al alcance de todos</h3>
+          <p>
+            <strong>VIGEST</strong> es una red de gestión de transporte que conecta a personas y negocios con transportistas de confianza en toda Cuba. Nacimos con una idea clara: moverte o mover lo tuyo no debe ser un dolor de cabeza.
+          </p>
+          <p>
+            Trabajamos con transportistas verificados de todos los tipos —camiones, camionetas, triciclos, motorinas y autos ligeros— para garantizar que cada servicio se cumpla con seriedad, responsabilidad y respeto.
+          </p>
+          <p>
+            Nuestro compromiso es simple: <strong>servicio, movilidad y confianza</strong>. Sin promesas vacías, sin complicaciones. Solo soluciones reales.
+          </p>
+        </div>
+        <div class="sobre-imagen">
+          <div class="stat">100%</div>
+          <div class="stat-label">Transportistas verificados</div>
+          <div style="margin-top: 2rem;">
+            <div class="stat">8AM - 8PM</div>
+            <div class="stat-label">Atención al cliente</div>
+          </div>
+          <div style="margin-top: 2rem;">
+            <div class="stat">#1</div>
+            <div class="stat-label">Compromiso con Cuba</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MISIÓN VISIÓN VALORES -->
+  <section class="mvv" id="mvv">
+    <div class="container">
+      <div class="divider"></div>
+      <h2 class="section-title">Nuestra Esencia</h2>
+      <p class="section-subtitle">Los pilares que guían cada decisión que tomamos.</p>
+
+      <div class="mvv-grid">
+        <div class="mvv-card">
+          <div class="mvv-icon">
+            <span class="material-symbols-outlined">flag</span>
+          </div>
+          <h3>Misión</h3>
+          <p>
+            Facilitar el movimiento de personas y mercancías en Cuba, ofreciendo un servicio seguro, confiable y accesible, que beneficie tanto a clientes como a transportistas.
+          </p>
+        </div>
+
+        <div class="mvv-card">
+          <div class="mvv-icon">
+            <span class="material-symbols-outlined">visibility</span>
+          </div>
+          <h3>Visión</h3>
+          <p>
+            Ser la red de transporte más grande y confiable de Cuba, reconocida por nuestra seriedad, transparencia y compromiso con cada servicio prestado.
+          </p>
+        </div>
+
+        <div class="mvv-card">
+          <div class="mvv-icon">
+            <span class="material-symbols-outlined">diamond</span>
+          </div>
+          <h3>Valores</h3>
+          <ul class="valores-lista">
+            <li><strong>Confianza:</strong> cada transportista es verificado.</li>
+            <li><strong>Responsabilidad:</strong> cumplimos lo que prometemos.</li>
+            <li><strong>Respeto:</strong> tratamos a todos por igual.</li>
+            <li><strong>Crecimiento:</strong> crecemos juntos, clientes y choferes.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICIOS -->
+  <section class="servicios" id="servicios">
+    <div class="container">
+      <div class="divider"></div>
+      <h2 class="section-title">Nuestros Servicios</h2>
+      <p class="section-subtitle">Soluciones de transporte para cada necesidad.</p>
+
+      <div class="servicios-grid">
+        <div class="servicio-card">
+          <div class="icono">
+            <span class="material-symbols-outlined">inventory_2</span>
+          </div>
+          <h3>Cargas y Mudanzas</h3>
+          <p>Transporte de mercancía para MIPYMES, paladares, emprendedores y familias.</p>
+        </div>
+
+        <div class="servicio-card">
+          <div class="icono">
+            <span class="material-symbols-outlined">directions_car</span>
+          </div>
+          <h3>Pasajeros</h3>
+          <p>Viajes interprovinciales y locales con choferes verificados y seguros.</p>
+        </div>
+
+        <div class="servicio-card">
+          <div class="icono">
+            <span class="material-symbols-outlined">delivery_dining</span>
+          </div>
+          <h3>Delivery y Mandados</h3>
+          <p>Entregas rápidas y seguras en motorina o triciclo para tu negocio.</p>
+        </div>
+
+        <div class="servicio-card">
+          <div class="icono">
+            <span class="material-symbols-outlined">local_gas_station</span>
+          </div>
+          <h3>Venta de Combustible</h3>
+          <p>Combustible de proveedores verificados para tu vehículo o negocio.</p>
+        </div>
+
+        <div class="servicio-card servicio-talleres">
+          <div class="icono">
+            <span class="material-symbols-outlined">build</span>
+          </div>
+          <h3>Talleres y Reparaciones</h3>
+          <p>Talleres mecánicos y servicios de reparación de confianza.</p>
+        </div>
+
+        <div class="servicio-card servicio-empleo">
+          <div class="icono">
+            <span class="material-symbols-outlined">work</span>
+          </div>
+          <h3>Búsqueda y Ofertas de Empleo</h3>
+          <p>Ofertas de empleo verificadas de proveedores para quienes buscan trabajo.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CÓMO FUNCIONA -->
+  <section class="como-funciona">
+    <div class="container">
+      <div class="divider"></div>
+      <h2 class="section-title">¿Cómo funciona?</h2>
+      <p class="section-subtitle">Solicitar nuestro servicio es tan fácil como enviar un mensaje.</p>
+
+      <div class="pasos-grid">
+        <div class="paso">
+          <div class="paso-numero">1</div>
+          <h4>Escríbenos</h4>
+          <p>Envíanos tu solicitud por WhatsApp con origen, destino y fecha.</p>
+        </div>
+
+        <div class="paso">
+          <div class="paso-numero">2</div>
+          <h4>Te cotizamos</h4>
+          <p>Te damos el precio y te asignamos un transportista verificado.</p>
+        </div>
+
+        <div class="paso">
+          <div class="paso-numero">3</div>
+          <h4>Confirmas</h4>
+          <p>Aceptas el servicio y coordinamos todos los detalles contigo.</p>
+        </div>
+
+        <div class="paso">
+          <div class="paso-numero">4</div>
+          <h4>Listo</h4>
+          <p>Tu carga o viaje se realiza con seguridad y puntualidad.</p>
+        </div>
+
+        <div class="paso">
+          <div class="paso-numero">5</div>
+          <h4>¿Eres proveedor?</h4>
+          <p>Si eres MIPYME o TCP y quieres pertenecer a nuestra red, escríbenos y te damos los detalles.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section class="contacto" id="contacto">
+    <div class="container">
+      <div class="divider"></div>
+      <h2 class="section-title">Contáctanos</h2>
+      <p class="section-subtitle">Estamos disponibles para atenderte cuando nos necesites.</p>
+
+      <div class="contacto-botones">
+        <a href="https://wa.me/5363990562?text=Hola%20VIGEST,%20necesito%20información" class="btn-contacto whatsapp" target="_blank">
+          <span class="material-symbols-outlined">chat</span>
+          WhatsApp
+        </a>
+        <a href="mailto:vigest.vc@gmail.com" class="btn-contacto correo">
+          <span class="material-symbols-outlined">mail</span>
+          Correo
+        </a>
+      </div>
+
+      <!-- BOTÓN FACEBOOK CENTRADO ABAJO -->
+      <div class="contacto-facebook-container">
+        <a href="https://www.facebook.com/profile.php?id=61594473541613" class="btn-contacto facebook" target="_blank">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+          </svg>
+          Facebook
+        </a>
+      </div>
+
+      <p style="color: rgba(245,245,245,0.7); margin-top: 2rem; font-size: 0.9rem;">
+        📍 Cuba | Horario de atención: 8:00 AM – 8:00 PM
+      </p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="logo-footer">
+      <img src="logo.png" alt="VIGEST" class="logo-img">
+    </div>
+    <p>Servicio · Movilidad · Confianza</p>
+    <p>© 2026 VIGEST. Todos los derechos reservados.</p>
+    <p class="hashtags">#VIGEST #TransporteCuba #Movilidad #Confianza</p>
+  </footer>
+
+  <!-- BOTÓN WHATSAPP FLOTANTE -->
+  <a href="https://wa.me/5363990562?text=Hola%20VIGEST,%20necesito%20información" class="whatsapp-flotante" target="_blank" aria-label="WhatsApp">
+    <span class="material-symbols-outlined">chat</span>
+  </a>
+
+</body>
+</html>
