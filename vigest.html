@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VIGEST | Red de Transporte en Cuba</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚛</text></svg>">
   <meta name="description" content="VIGEST - Servicio, movilidad y confianza. Gestión de transporte verificado en Cuba: cargas, pasajeros, mudanzas, delivery, combustible, talleres y empleos.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚛</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -1028,158 +1028,116 @@
           async src="//gc.zgo.at/count.js"></script>
 
   <!-- ===== GOATCOUNTER: CONTADOR PERSONALIZADO ===== -->
-<script>
-  (function() {
-    'use strict';
+  <script>
+    (function() {
+      'use strict';
 
-    var SITE_URL = 'https://edbetgar.goatcounter.com';
-    var CACHE_KEY = 'vigest_total_cache';
+      var SITE_URL = 'https://edbetgar.goatcounter.com';
+      var CACHE_KEY = 'vigest_stats_cache';
 
-    // ===== UTILIDADES =====
-    function getDateString(offset) {
-      var d = new Date();
-      if (offset) d.setDate(d.getDate() + offset);
-      var y = d.getFullYear();
-      var m = String(d.getMonth() + 1).padStart(2, '0');
-      var day = String(d.getDate()).padStart(2, '0');
-      return y + m + day;
-    }
-
-    // Convierte "YYYYMMDD" en un objeto Date válido
-    function stringToDate(s) {
-      var y = parseInt(s.substr(0, 4), 10);
-      var m = parseInt(s.substr(4, 2), 10) - 1;
-      var d = parseInt(s.substr(6, 2), 10);
-      return new Date(y, m, d);
-    }
-
-    // Diferencia en días entre dos strings "YYYYMMDD"
-    function daysBetween(s1, s2) {
-      var d1 = stringToDate(s1);
-      var d2 = stringToDate(s2);
-      return Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
-    }
-
-    // ===== REGISTRAR VISITA DIARIA =====
-    function trackDaily() {
-      var today = getDateString(0);
-      var img = new Image();
-      img.src = SITE_URL + '/count?p=' + 'visita-' + today + '&rnd=' + Date.now();
-    }
-
-    // ===== CONSULTAR UN PATH =====
-    function fetchCount(path) {
-      var url = SITE_URL + '/counter/' + path + '.json';
-      return fetch(url, { method: 'GET', mode: 'cors' })
-        .then(function(r) {
-          if (!r.ok) throw new Error('HTTP ' + r.status);
-          return r.json();
-        })
-        .then(function(data) {
-          return parseInt(data.count) || 0;
-        });
-    }
-
-    // ===== ANIMAR NÚMERO =====
-    function animateNumber(el, target) {
-      if (!el) return;
-      if (target <= 0) { el.textContent = '0'; return; }
-      var duration = 1500;
-      var start = performance.now();
-      function step(now) {
-        var progress = Math.min((now - start) / duration, 1);
-        var eased = 1 - Math.pow(1 - progress, 3);
-        el.textContent = Math.round(eased * target).toLocaleString('es-CU');
-        if (progress < 1) requestAnimationFrame(step);
-      }
-      requestAnimationFrame(step);
-    }
-
-    // ===== TOTAL HISTÓRICO (con cache diario) =====
-    async function getTotalHistorical() {
-      var today = getDateString(0);
-
-      // Leer cache
-      var cache = null;
-      try {
-        cache = JSON.parse(localStorage.getItem(CACHE_KEY));
-      } catch (e) { cache = null; }
-
-      // Si ya calculamos el total de hoy, lo devolvemos
-      if (cache && cache.date === today) {
-        return cache.total;
+      // ===== UTILIDADES =====
+      function formatDate(date) {
+        var y = date.getFullYear();
+        var m = String(date.getMonth() + 1).padStart(2, '0');
+        var d = String(date.getDate()).padStart(2, '0');
+        return y + '-' + m + '-' + d;
       }
 
-      // Total base y días a consultar
-      var baseTotal = 0;
-      var daysToFetch = 1;
+      function getDate(offsetDays) {
+        var d = new Date();
+        if (offsetDays) d.setDate(d.getDate() + offsetDays);
+        return formatDate(d);
+      }
 
-      if (cache && cache.date) {
-        var diff = daysBetween(cache.date, today);
-        if (diff > 0 && diff <= 30) {
-          baseTotal = cache.total;
-          daysToFetch = diff;
+      // ===== CONSULTAR TOTAL (con rango de fechas opcional) =====
+      function fetchTotal(startDate, endDate) {
+        var url = SITE_URL + '/counter/TOTAL.json';
+        var params = [];
+        if (startDate) params.push('start=' + startDate);
+        if (endDate) params.push('end=' + endDate);
+        if (params.length) url += '?' + params.join('&');
+
+        return fetch(url, { method: 'GET', mode: 'cors' })
+          .then(function(r) {
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            return r.json();
+          })
+          .then(function(data) {
+            return parseInt(data.count) || 0;
+          });
+      }
+
+      // ===== ANIMAR NÚMERO =====
+      function animateNumber(el, target) {
+        if (!el) return;
+        if (target <= 0) { el.textContent = '0'; return; }
+        var duration = 1500;
+        var start = performance.now();
+        function step(now) {
+          var progress = Math.min((now - start) / duration, 1);
+          var eased = 1 - Math.pow(1 - progress, 3);
+          el.textContent = Math.round(eased * target).toLocaleString('es-CU');
+          if (progress < 1) requestAnimationFrame(step);
         }
-        // Si diff > 30, el cache es muy viejo. Empezamos de cero.
+        requestAnimationFrame(step);
       }
 
-      // Sumar los días nuevos
-      var total = baseTotal;
-      for (var i = 0; i < daysToFetch; i++) {
+      // ===== CARGAR ESTADÍSTICAS =====
+      async function loadStats() {
+        var today = getDate(0);
+        var weekAgo = getDate(-6);
+
+        // Leer cache
+        var cache = null;
         try {
-          var c = await fetchCount('visita-' + getDateString(-i));
-          total += c;
-        } catch (e) {
-          // Día sin datos: cuenta como 0
+          cache = JSON.parse(localStorage.getItem(CACHE_KEY));
+        } catch (e) { cache = null; }
+
+        // Si hay cache de hoy, usarlo
+        if (cache && cache.date === today) {
+          animateNumber(document.getElementById('stat-today'), cache.today);
+          animateNumber(document.getElementById('stat-week'), cache.week);
+          animateNumber(document.getElementById('stat-total'), cache.total);
+          return;
         }
-      }
 
-      // Guardar cache
-      try {
-        localStorage.setItem(CACHE_KEY, JSON.stringify({ date: today, total: total }));
-      } catch (e) {}
+        var todayCount = 0, weekCount = 0, totalCount = 0;
 
-      return total;
-    }
+        // HOY
+        try {
+          todayCount = await fetchTotal(today, today);
+        } catch (e) { todayCount = 0; }
 
-    // ===== CARGAR TODAS LAS ESTADÍSTICAS =====
-    async function loadStats() {
-      // HOY
-      try {
-        var todayCount = await fetchCount('visita-' + getDateString(0));
+        // SEMANA (últimos 7 días)
+        try {
+          weekCount = await fetchTotal(weekAgo, today);
+        } catch (e) { weekCount = 0; }
+
+        // TOTAL HISTÓRICO
+        try {
+          totalCount = await fetchTotal();
+        } catch (e) { totalCount = 0; }
+
+        // Mostrar
         animateNumber(document.getElementById('stat-today'), todayCount);
-      } catch (e) {
-        document.getElementById('stat-today').textContent = '0';
+        animateNumber(document.getElementById('stat-week'), weekCount);
+        animateNumber(document.getElementById('stat-total'), totalCount);
+
+        // Guardar cache
+        try {
+          localStorage.setItem(CACHE_KEY, JSON.stringify({
+            date: today,
+            today: todayCount,
+            week: weekCount,
+            total: totalCount
+          }));
+        } catch (e) {}
       }
 
-      // ÚLTIMOS 7 DÍAS
-      try {
-        var weekTotal = 0;
-        for (var i = 0; i < 7; i++) {
-          try {
-            var c = await fetchCount('visita-' + getDateString(-i));
-            weekTotal += c;
-          } catch (e) {}
-        }
-        animateNumber(document.getElementById('stat-week'), weekTotal);
-      } catch (e) {
-        document.getElementById('stat-week').textContent = '0';
-      }
-
-      // TOTAL HISTÓRICO
-      try {
-        var total = await getTotalHistorical();
-        animateNumber(document.getElementById('stat-total'), total);
-      } catch (e) {
-        document.getElementById('stat-total').textContent = '0';
-      }
-    }
-
-    // ===== INICIAR =====
-    trackDaily();
-    setTimeout(loadStats, 1500);
-  })();
-</script>
+      // ===== INICIAR =====
+      setTimeout(loadStats, 1500);
+    })();
+  </script>
 
 </body>
 </html>
