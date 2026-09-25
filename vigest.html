@@ -1033,7 +1033,7 @@
     'use strict';
 
     var SITE_URL = 'https://edbetgar.goatcounter.com';
-    var START_DATE = '2026-09-24'; // Fecha en que empezamos a contar
+    var CACHE_KEY = 'vigest_total_cache';
 
     // ===== UTILIDADES =====
     function getDateString(offset) {
@@ -1045,10 +1045,19 @@
       return y + m + day;
     }
 
-    function daysBetween(dateStr1, dateStr2) {
-      var d1 = new Date(dateStr1);
-      var d2 = new Date(dateStr2);
-      return Math.floor((d2 - d1) / (1000 * 60 * 60 * 24));
+    // Convierte "YYYYMMDD" en un objeto Date válido
+    function stringToDate(s) {
+      var y = parseInt(s.substr(0, 4), 10);
+      var m = parseInt(s.substr(4, 2), 10) - 1;
+      var d = parseInt(s.substr(6, 2), 10);
+      return new Date(y, m, d);
+    }
+
+    // Diferencia en días entre dos strings "YYYYMMDD"
+    function daysBetween(s1, s2) {
+      var d1 = stringToDate(s1);
+      var d2 = stringToDate(s2);
+      return Math.round((d2 - d1) / (1000 * 60 * 60 * 24));
     }
 
     // ===== REGISTRAR VISITA DIARIA =====
@@ -1086,54 +1095,48 @@
       requestAnimationFrame(step);
     }
 
-    // ===== CALCULAR TOTAL HISTÓRICO =====
-    // Suma todos los contadores diarios desde START_DATE hasta hoy.
-    // Usa cache en localStorage para no hacer 365 peticiones cada vez.
+    // ===== TOTAL HISTÓRICO (con cache diario) =====
     async function getTotalHistorical() {
       var today = getDateString(0);
-      var totalDays = daysBetween(START_DATE, today) + 1;
-      if (totalDays < 1) totalDays = 1;
 
-      // Cache: guardar el total y hasta qué día se calculó
-      var cacheKey = 'vigest_total_cache';
+      // Leer cache
       var cache = null;
       try {
-        cache = JSON.parse(localStorage.getItem(cacheKey));
+        cache = JSON.parse(localStorage.getItem(CACHE_KEY));
       } catch (e) { cache = null; }
 
-      // Si ya calculamos el total para hoy, lo devolvemos
+      // Si ya calculamos el total de hoy, lo devolvemos
       if (cache && cache.date === today) {
         return cache.total;
       }
 
-      // Si tenemos cache de ayer, solo sumamos los días nuevos
-      var startOffset = 0;
+      // Total base y días a consultar
       var baseTotal = 0;
+      var daysToFetch = 1;
+
       if (cache && cache.date) {
-        var daysSinceCache = daysBetween(cache.date, today);
-        if (daysSinceCache > 0 && daysSinceCache < 30) {
-          startOffset = daysSinceCache;
+        var diff = daysBetween(cache.date, today);
+        if (diff > 0 && diff <= 30) {
           baseTotal = cache.total;
+          daysToFetch = diff;
         }
+        // Si diff > 30, el cache es muy viejo. Empezamos de cero.
       }
 
+      // Sumar los días nuevos
       var total = baseTotal;
-      // Sumamos los días que faltan (desde el último cache hasta hoy)
-      var daysToCheck = startOffset > 0 ? startOffset : totalDays;
-      var limit = Math.min(daysToCheck, 365); // máximo 1 año
-
-      for (var i = 0; i < limit; i++) {
+      for (var i = 0; i < daysToFetch; i++) {
         try {
           var c = await fetchCount('visita-' + getDateString(-i));
           total += c;
         } catch (e) {
-          // Día sin datos, cuenta como 0
+          // Día sin datos: cuenta como 0
         }
       }
 
       // Guardar cache
       try {
-        localStorage.setItem(cacheKey, JSON.stringify({ date: today, total: total }));
+        localStorage.setItem(CACHE_KEY, JSON.stringify({ date: today, total: total }));
       } catch (e) {}
 
       return total;
