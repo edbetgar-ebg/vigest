@@ -1027,97 +1027,155 @@
           async src="//gc.zgo.at/count.js"></script>
 
   <!-- ===== GOATCOUNTER: CONTADOR PERSONALIZADO ===== -->
-  <script>
-    (function() {
-      'use strict';
+<script>
+  (function() {
+    'use strict';
 
-      var SITE_URL = 'https://edbetgar.goatcounter.com';
+    var SITE_URL = 'https://edbetgar.goatcounter.com';
+    var START_DATE = '2025-09-25'; // Fecha en que empezamos a contar
 
-      function getDateString(offset) {
-        var d = new Date();
-        if (offset) d.setDate(d.getDate() + offset);
-        var y = d.getFullYear();
-        var m = String(d.getMonth() + 1).padStart(2, '0');
-        var day = String(d.getDate()).padStart(2, '0');
-        return y + m + day;
+    // ===== UTILIDADES =====
+    function getDateString(offset) {
+      var d = new Date();
+      if (offset) d.setDate(d.getDate() + offset);
+      var y = d.getFullYear();
+      var m = String(d.getMonth() + 1).padStart(2, '0');
+      var day = String(d.getDate()).padStart(2, '0');
+      return y + m + day;
+    }
+
+    function daysBetween(dateStr1, dateStr2) {
+      var d1 = new Date(dateStr1);
+      var d2 = new Date(dateStr2);
+      return Math.floor((d2 - d1) / (1000 * 60 * 60 * 24));
+    }
+
+    // ===== REGISTRAR VISITA DIARIA =====
+    function trackDaily() {
+      var today = getDateString(0);
+      var img = new Image();
+      img.src = SITE_URL + '/count?p=' + 'visita-' + today + '&rnd=' + Date.now();
+    }
+
+    // ===== CONSULTAR UN PATH =====
+    function fetchCount(path) {
+      var url = SITE_URL + '/counter/' + path + '.json';
+      return fetch(url, { method: 'GET', mode: 'cors' })
+        .then(function(r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        })
+        .then(function(data) {
+          return parseInt(data.count) || 0;
+        });
+    }
+
+    // ===== ANIMAR NÚMERO =====
+    function animateNumber(el, target) {
+      if (!el) return;
+      if (target <= 0) { el.textContent = '0'; return; }
+      var duration = 1500;
+      var start = performance.now();
+      function step(now) {
+        var progress = Math.min((now - start) / duration, 1);
+        var eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.round(eased * target).toLocaleString('es-CU');
+        if (progress < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }
+
+    // ===== CALCULAR TOTAL HISTÓRICO =====
+    // Suma todos los contadores diarios desde START_DATE hasta hoy.
+    // Usa cache en localStorage para no hacer 365 peticiones cada vez.
+    async function getTotalHistorical() {
+      var today = getDateString(0);
+      var totalDays = daysBetween(START_DATE, today) + 1;
+      if (totalDays < 1) totalDays = 1;
+
+      // Cache: guardar el total y hasta qué día se calculó
+      var cacheKey = 'vigest_total_cache';
+      var cache = null;
+      try {
+        cache = JSON.parse(localStorage.getItem(cacheKey));
+      } catch (e) { cache = null; }
+
+      // Si ya calculamos el total para hoy, lo devolvemos
+      if (cache && cache.date === today) {
+        return cache.total;
       }
 
-      function trackDaily() {
-        var today = getDateString(0);
-        var img = new Image();
-        img.src = SITE_URL + '/count?p=' + 'visita-' + today + '&rnd=' + Date.now();
-      }
-
-      function fetchCount(path) {
-        var url = SITE_URL + '/counter/' + path + '.json';
-        return fetch(url, { method: 'GET', mode: 'cors' })
-          .then(function(r) {
-            if (!r.ok) throw new Error('HTTP ' + r.status);
-            return r.json();
-          })
-          .then(function(data) {
-            return parseInt(data.count) || 0;
-          });
-      }
-
-      function animateNumber(el, target) {
-        if (!el) return;
-        if (target <= 0) { el.textContent = '0'; return; }
-        var duration = 1500;
-        var start = performance.now();
-        function step(now) {
-          var progress = Math.min((now - start) / duration, 1);
-          var eased = 1 - Math.pow(1 - progress, 3);
-          el.textContent = Math.round(eased * target).toLocaleString('es-CU');
-          if (progress < 1) requestAnimationFrame(step);
+      // Si tenemos cache de ayer, solo sumamos los días nuevos
+      var startOffset = 0;
+      var baseTotal = 0;
+      if (cache && cache.date) {
+        var daysSinceCache = daysBetween(cache.date, today);
+        if (daysSinceCache > 0 && daysSinceCache < 30) {
+          startOffset = daysSinceCache;
+          baseTotal = cache.total;
         }
-        requestAnimationFrame(step);
       }
 
-      async function findTotalPath() {
-        var paths = ['vigest/vigest.html', 'vigest.html', 'vigest/', 'vigest'];
-        for (var i = 0; i < paths.length; i++) {
+      var total = baseTotal;
+      // Sumamos los días que faltan (desde el último cache hasta hoy)
+      var daysToCheck = startOffset > 0 ? startOffset : totalDays;
+      var limit = Math.min(daysToCheck, 365); // máximo 1 año
+
+      for (var i = 0; i < limit; i++) {
+        try {
+          var c = await fetchCount('visita-' + getDateString(-i));
+          total += c;
+        } catch (e) {
+          // Día sin datos, cuenta como 0
+        }
+      }
+
+      // Guardar cache
+      try {
+        localStorage.setItem(cacheKey, JSON.stringify({ date: today, total: total }));
+      } catch (e) {}
+
+      return total;
+    }
+
+    // ===== CARGAR TODAS LAS ESTADÍSTICAS =====
+    async function loadStats() {
+      // HOY
+      try {
+        var todayCount = await fetchCount('visita-' + getDateString(0));
+        animateNumber(document.getElementById('stat-today'), todayCount);
+      } catch (e) {
+        document.getElementById('stat-today').textContent = '0';
+      }
+
+      // ÚLTIMOS 7 DÍAS
+      try {
+        var weekTotal = 0;
+        for (var i = 0; i < 7; i++) {
           try {
-            var count = await fetchCount(paths[i]);
-            if (count > 0) return count;
+            var c = await fetchCount('visita-' + getDateString(-i));
+            weekTotal += c;
           } catch (e) {}
         }
-        return 0;
+        animateNumber(document.getElementById('stat-week'), weekTotal);
+      } catch (e) {
+        document.getElementById('stat-week').textContent = '0';
       }
 
-      async function loadStats() {
-        try {
-          var todayCount = await fetchCount('visita-' + getDateString(0));
-          animateNumber(document.getElementById('stat-today'), todayCount);
-        } catch (e) {
-          document.getElementById('stat-today').textContent = '0';
-        }
-
-        try {
-          var weekTotal = 0;
-          for (var i = 0; i < 7; i++) {
-            try {
-              var c = await fetchCount('visita-' + getDateString(-i));
-              weekTotal += c;
-            } catch (e) {}
-          }
-          animateNumber(document.getElementById('stat-week'), weekTotal);
-        } catch (e) {
-          document.getElementById('stat-week').textContent = '0';
-        }
-
-        try {
-          var total = await findTotalPath();
-          animateNumber(document.getElementById('stat-total'), total);
-        } catch (e) {
-          document.getElementById('stat-total').textContent = '0';
-        }
+      // TOTAL HISTÓRICO
+      try {
+        var total = await getTotalHistorical();
+        animateNumber(document.getElementById('stat-total'), total);
+      } catch (e) {
+        document.getElementById('stat-total').textContent = '0';
       }
+    }
 
-      trackDaily();
-      setTimeout(loadStats, 2000);
-    })();
-  </script>
+    // ===== INICIAR =====
+    trackDaily();
+    setTimeout(loadStats, 1500);
+  })();
+</script>
 
 </body>
 </html>
