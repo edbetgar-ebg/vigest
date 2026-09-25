@@ -518,6 +518,125 @@
       width: 100%;
     }
 
+    /* ===== ESTADÍSTICAS / CONTADOR ===== */
+    .estadisticas {
+      background: linear-gradient(135deg, #001a3a 0%, #000a18 100%);
+      padding: 5rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .estadisticas::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(255,107,0,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .estadisticas .section-title { color: var(--blanco); position: relative; z-index: 2; }
+    .estadisticas .section-subtitle { color: rgba(245,245,245,0.75); position: relative; z-index: 2; }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      transition: all 0.3s;
+      backdrop-filter: blur(10px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--naranja), transparent);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(255,107,0,0.4);
+      background: rgba(255,107,0,0.05);
+      box-shadow: 0 15px 40px rgba(255, 107, 0, 0.15);
+    }
+
+    .stat-icon {
+      width: 60px;
+      height: 60px;
+      background: rgba(255,107,0,0.15);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.2rem;
+      color: var(--naranja);
+    }
+
+    .stat-icon .material-symbols-outlined {
+      font-size: 2rem;
+      font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 40;
+    }
+
+    .stat-number {
+      font-family: 'Cinzel', serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--naranja);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+      text-shadow: 0 0 30px rgba(255,107,0,0.4);
+      min-height: 3rem;
+    }
+
+    .stat-label {
+      color: rgba(245,245,245,0.85);
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    .stat-live {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-top: 1rem;
+      font-size: 0.7rem;
+      color: rgba(245,245,245,0.5);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .stat-live .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #25D366;
+      box-shadow: 0 0 10px #25D366;
+      animation: blink 2s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
     /* ===== FOOTER ===== */
     footer {
       background: var(--negro);
@@ -596,6 +715,8 @@
       .sobre-imagen .stat { font-size: 2rem; }
       .hero .logo-img { height: clamp(140px, 40vw, 240px); }
       .logo-footer .logo-img { height: 90px; }
+      .stat-number { font-size: 2.2rem; }
+      .stats-grid { grid-template-columns: 1fr; max-width: 320px; }
     }
   </style>
 </head>
@@ -622,7 +743,7 @@
       <img src="logo.png" alt="VIGEST" class="logo-img">
       <div class="tagline">Servicio · Movilidad · Confianza</div>
       <p class="descripcion">
-        Nace la red de gestión de transporte más confiable de Cuba en crecimiento. Conectamos clientes con transportistas verificados para cargas, pasajeros, mudanzas y delivery.
+        La red de gestión de transporte más confiable de Cuba. Conectamos clientes con transportistas verificados para cargas, pasajeros, mudanzas y delivery.
       </p>
       <a href="https://wa.me/5363990562?text=Hola%20VIGEST,%20necesito%20información" class="btn-principal" target="_blank">
         <span class="material-symbols-outlined">chat</span>
@@ -829,7 +950,6 @@
         </a>
       </div>
 
-      <!-- BOTÓN FACEBOOK CENTRADO ABAJO -->
       <div class="contacto-facebook-container">
         <a href="https://www.facebook.com/profile.php?id=61594473541613" class="btn-contacto facebook" target="_blank">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -845,13 +965,55 @@
     </div>
   </section>
 
+  <!-- ===== ESTADÍSTICAS / CONTADOR DE VISITAS ===== -->
+  <section class="estadisticas" id="estadisticas">
+    <div class="container">
+      <div class="divider"></div>
+      <h2 class="section-title">Nuestra Comunidad en Números</h2>
+      <p class="section-subtitle">Cada día más personas confían en VIGEST para mover lo que más les importa.</p>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon">
+            <span class="material-symbols-outlined">today</span>
+          </div>
+          <div class="stat-number" id="stat-today">--</div>
+          <div class="stat-label">Visitas hoy</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">
+            <span class="material-symbols-outlined">date_range</span>
+          </div>
+          <div class="stat-number" id="stat-week">--</div>
+          <div class="stat-label">Últimos 7 días</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon">
+            <span class="material-symbols-outlined">trending_up</span>
+          </div>
+          <div class="stat-number" id="stat-total">--</div>
+          <div class="stat-label">Total histórico</div>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 2rem;">
+        <span class="stat-live">
+          <span class="dot"></span>
+          Datos en tiempo real
+        </span>
+      </div>
+    </div>
+  </section>
+
   <!-- FOOTER -->
   <footer>
     <div class="logo-footer">
       <img src="logo.png" alt="VIGEST" class="logo-img">
     </div>
     <p>Servicio · Movilidad · Confianza</p>
-    <p>© 2026 VIGEST. Todos los derechos reservados.</p>
+    <p>© 2025 VIGEST. Todos los derechos reservados.</p>
     <p class="hashtags">#VIGEST #TransporteCuba #Movilidad #Confianza</p>
   </footer>
 
@@ -859,6 +1021,111 @@
   <a href="https://wa.me/5363990562?text=Hola%20VIGEST,%20necesito%20información" class="whatsapp-flotante" target="_blank" aria-label="WhatsApp">
     <span class="material-symbols-outlined">chat</span>
   </a>
+
+  <!-- ===== GOATCOUNTER: SEGUIMIENTO ===== -->
+  <script data-goatcounter="https://edbetgar.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
+
+  <!-- ===== GOATCOUNTER: CONTADOR PERSONALIZADO ===== -->
+  <script>
+    (function() {
+      'use strict';
+
+      var SITE_URL = 'https://edbetgar.goatcounter.com';
+
+      // Genera cadena de fecha tipo "20250925"
+      function getDateString(offset) {
+        var d = new Date();
+        if (offset) d.setDate(d.getDate() + offset);
+        var y = d.getFullYear();
+        var m = String(d.getMonth() + 1).padStart(2, '0');
+        var day = String(d.getDate()).padStart(2, '0');
+        return y + m + day;
+      }
+
+      // Registra una visita diaria como path adicional
+      function trackDaily() {
+        if (window.goatcounter && window.goatcounter.count) {
+          var today = getDateString(0);
+          window.goatcounter.count({
+            path: 'visita-' + today,
+            title: 'Visita diaria ' + today,
+            event: false
+          });
+        } else {
+          setTimeout(trackDaily, 300);
+        }
+      }
+
+      // Consulta el contador público de un path
+      function fetchCount(path) {
+        return fetch(SITE_URL + '/counter/' + path + '.json')
+          .then(function(r) { return r.json(); })
+          .then(function(data) {
+            return parseInt(data.count) || 0;
+          })
+          .catch(function() { return 0; });
+      }
+
+      // Anima un número desde 0 hasta el valor objetivo
+      function animateNumber(el, target) {
+        if (!el) return;
+        if (target === 0) {
+          el.textContent = '0';
+          return;
+        }
+        var duration = 1500;
+        var start = performance.now();
+        function step(now) {
+          var progress = Math.min((now - start) / duration, 1);
+          var eased = 1 - Math.pow(1 - progress, 3);
+          el.textContent = Math.round(eased * target).toLocaleString('es-CU');
+          if (progress < 1) requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      }
+
+      // Carga todas las estadísticas
+      async function loadStats() {
+        // Hoy
+        try {
+          var todayCount = await fetchCount('visita-' + getDateString(0));
+          animateNumber(document.getElementById('stat-today'), todayCount);
+        } catch (e) {
+          document.getElementById('stat-today').textContent = '0';
+        }
+
+        // Últimos 7 días
+        try {
+          var weekTotal = 0;
+          for (var i = 0; i < 7; i++) {
+            var c = await fetchCount('visita-' + getDateString(-i));
+            weekTotal += c;
+          }
+          animateNumber(document.getElementById('stat-week'), weekTotal);
+        } catch (e) {
+          document.getElementById('stat-week').textContent = '0';
+        }
+
+        // Total histórico (intenta varias rutas por si la URL cambia)
+        try {
+          var total = 0;
+          var possiblePaths = ['vigest/vigest.html', 'vigest.html', 'vigest', 'TOTAL'];
+          for (var j = 0; j < possiblePaths.length; j++) {
+            var t = await fetchCount(possiblePaths[j]);
+            if (t > 0) { total = t; break; }
+          }
+          animateNumber(document.getElementById('stat-total'), total);
+        } catch (e) {
+          document.getElementById('stat-total').textContent = '0';
+        }
+      }
+
+      // Inicializar
+      trackDaily();
+      setTimeout(loadStats, 1200);
+    })();
+  </script>
 
 </body>
 </html>
