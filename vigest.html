@@ -1028,116 +1028,97 @@
           async src="//gc.zgo.at/count.js"></script>
 
   <!-- ===== GOATCOUNTER: CONTADOR PERSONALIZADO ===== -->
-  <script>
-    (function() {
-      'use strict';
+<script>
+  (function() {
+    'use strict';
 
-      var SITE_URL = 'https://edbetgar.goatcounter.com';
-      var CACHE_KEY = 'vigest_stats_cache';
+    var SITE_URL = 'https://edbetgar.goatcounter.com';
 
-      // ===== UTILIDADES =====
-      function formatDate(date) {
-        var y = date.getFullYear();
-        var m = String(date.getMonth() + 1).padStart(2, '0');
-        var d = String(date.getDate()).padStart(2, '0');
-        return y + '-' + m + '-' + d;
+    // ===== UTILIDADES =====
+    function getDateString(offset) {
+      var d = new Date();
+      if (offset) d.setDate(d.getDate() + offset);
+      var y = d.getFullYear();
+      var m = String(d.getMonth() + 1).padStart(2, '0');
+      var day = String(d.getDate()).padStart(2, '0');
+      return y + m + day;
+    }
+
+    // ===== REGISTRAR VISITA DIARIA =====
+    function trackDaily() {
+      var today = getDateString(0);
+      var img = new Image();
+      img.src = SITE_URL + '/count?p=' + 'visita-' + today + '&rnd=' + Date.now();
+    }
+
+    // ===== CONSULTAR UN PATH =====
+    function fetchCount(path) {
+      var url = SITE_URL + '/counter/' + path + '.json';
+      return fetch(url, { method: 'GET', mode: 'cors' })
+        .then(function(r) {
+          if (!r.ok) throw new Error('HTTP ' + r.status);
+          return r.json();
+        })
+        .then(function(data) {
+          return parseInt(data.count) || 0;
+        });
+    }
+
+    // ===== ANIMAR NÚMERO =====
+    function animateNumber(el, target) {
+      if (!el) return;
+      if (target <= 0) { el.textContent = '0'; return; }
+      var duration = 1500;
+      var start = performance.now();
+      function step(now) {
+        var progress = Math.min((now - start) / duration, 1);
+        var eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.round(eased * target).toLocaleString('es-CU');
+        if (progress < 1) requestAnimationFrame(step);
       }
+      requestAnimationFrame(step);
+    }
 
-      function getDate(offsetDays) {
-        var d = new Date();
-        if (offsetDays) d.setDate(d.getDate() + offsetDays);
-        return formatDate(d);
-      }
-
-      // ===== CONSULTAR TOTAL (con rango de fechas opcional) =====
-      function fetchTotal(startDate, endDate) {
-        var url = SITE_URL + '/counter/TOTAL.json';
-        var params = [];
-        if (startDate) params.push('start=' + startDate);
-        if (endDate) params.push('end=' + endDate);
-        if (params.length) url += '?' + params.join('&');
-
-        return fetch(url, { method: 'GET', mode: 'cors' })
-          .then(function(r) {
-            if (!r.ok) throw new Error('HTTP ' + r.status);
-            return r.json();
-          })
-          .then(function(data) {
-            return parseInt(data.count) || 0;
-          });
-      }
-
-      // ===== ANIMAR NÚMERO =====
-      function animateNumber(el, target) {
-        if (!el) return;
-        if (target <= 0) { el.textContent = '0'; return; }
-        var duration = 1500;
-        var start = performance.now();
-        function step(now) {
-          var progress = Math.min((now - start) / duration, 1);
-          var eased = 1 - Math.pow(1 - progress, 3);
-          el.textContent = Math.round(eased * target).toLocaleString('es-CU');
-          if (progress < 1) requestAnimationFrame(step);
-        }
-        requestAnimationFrame(step);
-      }
-
-      // ===== CARGAR ESTADÍSTICAS =====
-      async function loadStats() {
-        var today = getDate(0);
-        var weekAgo = getDate(-6);
-
-        // Leer cache
-        var cache = null;
-        try {
-          cache = JSON.parse(localStorage.getItem(CACHE_KEY));
-        } catch (e) { cache = null; }
-
-        // Si hay cache de hoy, usarlo
-        if (cache && cache.date === today) {
-          animateNumber(document.getElementById('stat-today'), cache.today);
-          animateNumber(document.getElementById('stat-week'), cache.week);
-          animateNumber(document.getElementById('stat-total'), cache.total);
-          return;
-        }
-
-        var todayCount = 0, weekCount = 0, totalCount = 0;
-
-        // HOY
-        try {
-          todayCount = await fetchTotal(today, today);
-        } catch (e) { todayCount = 0; }
-
-        // SEMANA (últimos 7 días)
-        try {
-          weekCount = await fetchTotal(weekAgo, today);
-        } catch (e) { weekCount = 0; }
-
-        // TOTAL HISTÓRICO
-        try {
-          totalCount = await fetchTotal();
-        } catch (e) { totalCount = 0; }
-
-        // Mostrar
+    // ===== CARGAR ESTADÍSTICAS =====
+    async function loadStats() {
+      // HOY: consulta el path del día actual
+      try {
+        var todayCount = await fetchCount('visita-' + getDateString(0));
         animateNumber(document.getElementById('stat-today'), todayCount);
-        animateNumber(document.getElementById('stat-week'), weekCount);
-        animateNumber(document.getElementById('stat-total'), totalCount);
-
-        // Guardar cache
-        try {
-          localStorage.setItem(CACHE_KEY, JSON.stringify({
-            date: today,
-            today: todayCount,
-            week: weekCount,
-            total: totalCount
-          }));
-        } catch (e) {}
+      } catch (e) {
+        document.getElementById('stat-today').textContent = '0';
       }
 
-      // ===== INICIAR =====
-      setTimeout(loadStats, 1500);
-    })();
-  </script>
+      // SEMANA: suma los últimos 7 paths diarios
+      try {
+        var weekTotal = 0;
+        for (var i = 0; i < 7; i++) {
+          try {
+            var c = await fetchCount('visita-' + getDateString(-i));
+            weekTotal += c;
+          } catch (e) {
+            // Día sin datos: 0
+          }
+        }
+        animateNumber(document.getElementById('stat-week'), weekTotal);
+      } catch (e) {
+        document.getElementById('stat-week').textContent = '0';
+      }
+
+      // TOTAL: endpoint reservado TOTAL.json (sin filtros de fecha)
+      try {
+        var total = await fetchCount('TOTAL');
+        animateNumber(document.getElementById('stat-total'), total);
+      } catch (e) {
+        document.getElementById('stat-total').textContent = '0';
+      }
+    }
+
+    // ===== INICIAR =====
+    trackDaily();
+    setTimeout(loadStats, 1500);
+  })();
+</script>
 
 </body>
 </html>
