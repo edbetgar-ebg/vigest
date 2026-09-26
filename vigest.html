@@ -17,6 +17,7 @@
       --azul: #002B5B;
       --blanco: #F5F5F5;
       --negro: #0A0A0A;
+      --whatsapp: #25D366;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -41,7 +42,6 @@
       font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
     }
 
-    /* ===== LOGO IMAGEN ===== */
     .logo-img {
       display: block;
       width: auto;
@@ -52,7 +52,6 @@
     .hero .logo-img { height: clamp(160px, 30vw, 360px); margin: 0 auto 2rem; }
     .logo-footer .logo-img { height: 110px; margin: 0 auto; }
 
-    /* ===== HEADER ===== */
     header {
       position: fixed;
       top: 0; left: 0; right: 0;
@@ -105,7 +104,6 @@
       box-shadow: 0 8px 20px rgba(255, 107, 0, 0.4);
     }
 
-    /* ===== HERO ===== */
     .hero {
       min-height: 100vh;
       display: flex;
@@ -184,7 +182,6 @@
       box-shadow: 0 15px 40px rgba(255, 107, 0, 0.5);
     }
 
-    /* ===== SECCIONES ===== */
     section { padding: 6rem 2rem; }
 
     .container {
@@ -215,7 +212,6 @@
       border-radius: 2px;
     }
 
-    /* ===== SOBRE NOSOTROS ===== */
     .sobre { background: white; }
 
     .sobre-grid {
@@ -260,7 +256,6 @@
       margin-top: 0.5rem;
     }
 
-    /* ===== MISIÓN VISIÓN VALORES ===== */
     .mvv { background: var(--blanco); }
 
     .mvv-grid {
@@ -335,7 +330,6 @@
 
     .valores-lista li strong { color: var(--azul); }
 
-    /* ===== SERVICIOS ===== */
     .servicios { background: var(--azul); }
     .servicios .section-title { color: var(--blanco); }
     .servicios .section-subtitle { color: rgba(245,245,245,0.8); }
@@ -395,7 +389,6 @@
       text-align: center;
     }
 
-    /* ===== CÓMO FUNCIONA ===== */
     .como-funciona { background: white; }
 
     .pasos-grid {
@@ -444,7 +437,6 @@
       text-align: center;
     }
 
-    /* ===== CONTACTO ===== */
     .contacto {
       background: radial-gradient(circle at center, #0a1a30 0%, #001a3a 70%);
       text-align: center;
@@ -519,7 +511,120 @@
       width: 100%;
     }
 
-    /* ===== ESTADÍSTICAS / CONTADOR ===== */
+    /* ===== COMUNIDAD WHATSAPP ===== */
+    .comunidad {
+      background: white;
+      position: relative;
+    }
+
+    .comunidad-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .grupo-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+      border: 2px solid #e8e8e8;
+      border-radius: 20px;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .grupo-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: var(--whatsapp);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+
+    .grupo-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--whatsapp);
+      box-shadow: 0 20px 40px rgba(37, 211, 102, 0.2);
+    }
+
+    .grupo-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .grupo-icon {
+      width: 80px;
+      height: 80px;
+      background: rgba(37, 211, 102, 0.12);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      color: var(--whatsapp);
+      transition: all 0.3s ease;
+    }
+
+    .grupo-card:hover .grupo-icon {
+      background: var(--whatsapp);
+      color: white;
+      transform: rotate(-5deg) scale(1.05);
+    }
+
+    .grupo-icon svg {
+      width: 42px;
+      height: 42px;
+      fill: currentColor;
+    }
+
+    .grupo-card h3 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--azul);
+      margin-bottom: 0.6rem;
+      text-align: center;
+      letter-spacing: 0.02em;
+    }
+
+    .grupo-card p {
+      font-size: 0.9rem;
+      color: var(--gris);
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .grupo-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--whatsapp);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: auto;
+      transition: gap 0.3s ease;
+    }
+
+    .grupo-card:hover .grupo-cta {
+      gap: 0.7rem;
+    }
+
+    .grupo-cta .material-symbols-outlined {
+      font-size: 1.1rem;
+    }
+
     .estadisticas {
       background: linear-gradient(135deg, #001a3a 0%, #000a18 100%);
       padding: 5rem 2rem;
@@ -638,7 +743,6 @@
       50% { opacity: 0.3; }
     }
 
-    /* ===== FOOTER ===== */
     footer {
       background: var(--negro);
       color: rgba(245,245,245,0.6);
@@ -665,7 +769,6 @@
       margin-top: 1rem;
     }
 
-    /* ===== WHATSAPP FLOTANTE ===== */
     .whatsapp-flotante {
       position: fixed;
       bottom: 25px;
@@ -691,7 +794,6 @@
       font-variation-settings: 'FILL' 1, 'wght' 500, 'GRAD' 0, 'opsz' 40;
     }
 
-    /* ===== LAYOUT ESPECIAL PARA SERVICIOS EN DESKTOP ===== */
     @media (min-width: 1024px) {
       .servicios-grid {
         grid-template-columns: repeat(4, 1fr);
@@ -706,7 +808,6 @@
       }
     }
 
-    /* ===== RESPONSIVE ===== */
     @media (max-width: 768px) {
       header { padding: 0.4rem 1rem; }
       nav ul { display: none; }
@@ -718,12 +819,12 @@
       .logo-footer .logo-img { height: 90px; }
       .stat-number { font-size: 2.2rem; }
       .stats-grid { grid-template-columns: 1fr; max-width: 320px; }
+      .comunidad-grid { grid-template-columns: 1fr; max-width: 340px; margin: 0 auto; }
     }
   </style>
 </head>
 <body>
 
-  <!-- HEADER -->
   <header>
     <div class="logo-header">
       <img src="logo.png" alt="VIGEST" class="logo-img">
@@ -733,12 +834,12 @@
         <li><a href="#sobre">Nosotros</a></li>
         <li><a href="#mvv">Misión</a></li>
         <li><a href="#servicios">Servicios</a></li>
+        <li><a href="#comunidad">Comunidad</a></li>
         <li><a href="#contacto" class="btn-whatsapp-header">Contactar</a></li>
       </ul>
     </nav>
   </header>
 
-  <!-- HERO -->
   <section class="hero">
     <div class="hero-content">
       <img src="logo.png" alt="VIGEST" class="logo-img">
@@ -753,7 +854,6 @@
     </div>
   </section>
 
-  <!-- SOBRE NOSOTROS -->
   <section class="sobre" id="sobre">
     <div class="container">
       <div class="divider"></div>
@@ -789,7 +889,6 @@
     </div>
   </section>
 
-  <!-- MISIÓN VISIÓN VALORES -->
   <section class="mvv" id="mvv">
     <div class="container">
       <div class="divider"></div>
@@ -833,7 +932,6 @@
     </div>
   </section>
 
-  <!-- SERVICIOS -->
   <section class="servicios" id="servicios">
     <div class="container">
       <div class="divider"></div>
@@ -892,7 +990,6 @@
     </div>
   </section>
 
-  <!-- CÓMO FUNCIONA -->
   <section class="como-funciona">
     <div class="container">
       <div class="divider"></div>
@@ -933,7 +1030,6 @@
     </div>
   </section>
 
-  <!-- CONTACTO -->
   <section class="contacto" id="contacto">
     <div class="container">
       <div class="divider"></div>
@@ -966,7 +1062,73 @@
     </div>
   </section>
 
-  <!-- ===== ESTADÍSTICAS / CONTADOR DE VISITAS ===== -->
+  <!-- ===== COMUNIDAD DE WHATSAPP ===== -->
+  <section class="comunidad" id="comunidad">
+    <div class="container">
+      <div class="divider"></div>
+      <h2 class="section-title">Únete a Nuestra Comunidad</h2>
+      <p class="section-subtitle">Cuatro grupos de WhatsApp para que encuentres todo lo que necesitas, en un solo lugar.</p>
+
+      <div class="comunidad-grid">
+        <a href="https://chat.whatsapp.com/IK5SLxqjyKC7QyIPYSUfVK?s=cl&p=a&mlu=4&ilr=4" class="grupo-card" target="_blank" rel="noopener">
+          <div class="grupo-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+          </div>
+          <h3>Ventas</h3>
+          <p>Compra y vende productos, artículos y servicios entre miembros de la comunidad.</p>
+          <span class="grupo-cta">
+            Unirme
+            <span class="material-symbols-outlined">arrow_forward</span>
+          </span>
+        </a>
+
+        <a href="https://chat.whatsapp.com/Lta77mm0qTdCDWrSDkbZYu?s=cl&p=a&mlu=4&ilr=4" class="grupo-card" target="_blank" rel="noopener">
+          <div class="grupo-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+          </div>
+          <h3>Talleres, Partes y Piezas</h3>
+          <p>Encuentra talleres mecánicos, repuestos y piezas para tu vehículo.</p>
+          <span class="grupo-cta">
+            Unirme
+            <span class="material-symbols-outlined">arrow_forward</span>
+          </span>
+        </a>
+
+        <a href="https://chat.whatsapp.com/Epy5JKe3bX19oMFRxObSBt?s=cl&p=a&mlu=4&ilr=4" class="grupo-card" target="_blank" rel="noopener">
+          <div class="grupo-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+          </div>
+          <h3>Combustible</h3>
+          <p>Información actualizada sobre disponibilidad y precios de combustible.</p>
+          <span class="grupo-cta">
+            Unirme
+            <span class="material-symbols-outlined">arrow_forward</span>
+          </span>
+        </a>
+
+        <a href="https://chat.whatsapp.com/LQFRwRyHzKj72VWMLnNtwR?s=cl&p=a&mlu=4&ilr=4" class="grupo-card" target="_blank" rel="noopener">
+          <div class="grupo-icon">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+          </div>
+          <h3>Ofertas de Empleo</h3>
+          <p>Ofertas de trabajo verificadas y oportunidades laborales en toda Cuba.</p>
+          <span class="grupo-cta">
+            Unirme
+            <span class="material-symbols-outlined">arrow_forward</span>
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <section class="estadisticas" id="estadisticas">
     <div class="container">
       <div class="divider"></div>
@@ -1008,7 +1170,6 @@
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer>
     <div class="logo-footer">
       <img src="logo.png" alt="VIGEST" class="logo-img">
@@ -1018,107 +1179,111 @@
     <p class="hashtags">#VIGEST #TransporteCuba #Movilidad #Confianza</p>
   </footer>
 
-  <!-- BOTÓN WHATSAPP FLOTANTE -->
   <a href="https://wa.me/5363990562?text=Hola%20VIGEST,%20necesito%20información" class="whatsapp-flotante" target="_blank" aria-label="WhatsApp">
     <span class="material-symbols-outlined">chat</span>
   </a>
 
-  <!-- ===== GOATCOUNTER: SEGUIMIENTO ===== -->
   <script data-goatcounter="https://edbetgar.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
 
-  <!-- ===== GOATCOUNTER: CONTADOR PERSONALIZADO ===== -->
-<script>
-  (function() {
-    'use strict';
+  <script>
+    (function() {
+      'use strict';
 
-    var SITE_URL = 'https://edbetgar.goatcounter.com';
+      var SITE_URL = 'https://edbetgar.goatcounter.com';
+      var CACHE_KEY = 'vigest_stats_cache_v2';
 
-    // ===== UTILIDADES =====
-    function getDateString(offset) {
-      var d = new Date();
-      if (offset) d.setDate(d.getDate() + offset);
-      var y = d.getFullYear();
-      var m = String(d.getMonth() + 1).padStart(2, '0');
-      var day = String(d.getDate()).padStart(2, '0');
-      return y + m + day;
-    }
-
-    // ===== REGISTRAR VISITA DIARIA =====
-    function trackDaily() {
-      var today = getDateString(0);
-      var img = new Image();
-      img.src = SITE_URL + '/count?p=' + 'visita-' + today + '&rnd=' + Date.now();
-    }
-
-    // ===== CONSULTAR UN PATH =====
-    function fetchCount(path) {
-      var url = SITE_URL + '/counter/' + path + '.json';
-      return fetch(url, { method: 'GET', mode: 'cors' })
-        .then(function(r) {
-          if (!r.ok) throw new Error('HTTP ' + r.status);
-          return r.json();
-        })
-        .then(function(data) {
-          return parseInt(data.count) || 0;
-        });
-    }
-
-    // ===== ANIMAR NÚMERO =====
-    function animateNumber(el, target) {
-      if (!el) return;
-      if (target <= 0) { el.textContent = '0'; return; }
-      var duration = 1500;
-      var start = performance.now();
-      function step(now) {
-        var progress = Math.min((now - start) / duration, 1);
-        var eased = 1 - Math.pow(1 - progress, 3);
-        el.textContent = Math.round(eased * target).toLocaleString('es-CU');
-        if (progress < 1) requestAnimationFrame(step);
-      }
-      requestAnimationFrame(step);
-    }
-
-    // ===== CARGAR ESTADÍSTICAS =====
-    async function loadStats() {
-      // HOY: consulta el path del día actual
-      try {
-        var todayCount = await fetchCount('visita-' + getDateString(0));
-        animateNumber(document.getElementById('stat-today'), todayCount);
-      } catch (e) {
-        document.getElementById('stat-today').textContent = '0';
+      function getDateString(offset) {
+        var d = new Date();
+        if (offset) d.setDate(d.getDate() + offset);
+        var y = d.getFullYear();
+        var m = String(d.getMonth() + 1).padStart(2, '0');
+        var day = String(d.getDate()).padStart(2, '0');
+        return y + m + day;
       }
 
-      // SEMANA: suma los últimos 7 paths diarios
-      try {
-        var weekTotal = 0;
-        for (var i = 0; i < 7; i++) {
-          try {
-            var c = await fetchCount('visita-' + getDateString(-i));
-            weekTotal += c;
-          } catch (e) {
-            // Día sin datos: 0
-          }
+      function trackDaily() {
+        var today = getDateString(0);
+        var img = new Image();
+        img.src = SITE_URL + '/count?p=' + 'visita-' + today + '&rnd=' + Date.now();
+      }
+
+      function fetchCount(path) {
+        var url = SITE_URL + '/counter/' + path + '.json';
+        return fetch(url, { method: 'GET', mode: 'cors' })
+          .then(function(r) {
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            return r.json();
+          })
+          .then(function(data) {
+            return parseInt(data.count) || 0;
+          });
+      }
+
+      function animateNumber(el, target) {
+        if (!el) return;
+        if (target <= 0) { el.textContent = '0'; return; }
+        var duration = 1500;
+        var start = performance.now();
+        function step(now) {
+          var progress = Math.min((now - start) / duration, 1);
+          var eased = 1 - Math.pow(1 - progress, 3);
+          el.textContent = Math.round(eased * target).toLocaleString('es-CU');
+          if (progress < 1) requestAnimationFrame(step);
         }
-        animateNumber(document.getElementById('stat-week'), weekTotal);
-      } catch (e) {
-        document.getElementById('stat-week').textContent = '0';
+        requestAnimationFrame(step);
       }
 
-      // TOTAL: endpoint reservado TOTAL.json (sin filtros de fecha)
-      try {
-        var total = await fetchCount('TOTAL');
-        animateNumber(document.getElementById('stat-total'), total);
-      } catch (e) {
-        document.getElementById('stat-total').textContent = '0';
-      }
-    }
+      async function computeStats() {
+        var todayCount = 0;
+        var weekCount = 0;
+        var totalCount = 0;
 
-    // ===== INICIAR =====
-    trackDaily();
-    setTimeout(loadStats, 1500);
-  })();
-</script>
+        for (var i = 0; i < 30; i++) {
+          var c = 0;
+          try {
+            c = await fetchCount('visita-' + getDateString(-i));
+          } catch (e) {
+            c = 0;
+          }
+          totalCount += c;
+          if (i < 7) weekCount += c;
+          if (i === 0) todayCount = c;
+        }
+
+        return { today: todayCount, week: weekCount, total: totalCount };
+      }
+
+      async function loadStats() {
+        var today = getDateString(0);
+
+        var cache = null;
+        try { cache = JSON.parse(localStorage.getItem(CACHE_KEY)); } catch (e) { cache = null; }
+
+        var stats;
+        if (cache && cache.date === today) {
+          stats = { today: cache.today, week: cache.week, total: cache.total };
+        } else {
+          stats = await computeStats();
+          try {
+            localStorage.setItem(CACHE_KEY, JSON.stringify({
+              date: today,
+              today: stats.today,
+              week: stats.week,
+              total: stats.total
+            }));
+          } catch (e) {}
+        }
+
+        animateNumber(document.getElementById('stat-today'), stats.today);
+        animateNumber(document.getElementById('stat-week'), stats.week);
+        animateNumber(document.getElementById('stat-total'), stats.total);
+      }
+
+      trackDaily();
+      setTimeout(loadStats, 1500);
+    })();
+  </script>
 
 </body>
 </html>
